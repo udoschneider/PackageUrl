@@ -13,9 +13,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-PUrl class >> dockerImageNamed: imageName [ 
+PUrl class >> dockerImageNamed: imageName [
 
-^self dockerImageNamed: imageName version: 'latest'
+		^ self
+		  type: 'docker'
+		  namespace: nil
+		  name: imageName
+		  version: nil
+		  qualifiers: nil
+		  subpath: nil
 ]
 
 { #category : #'instance creation' }
