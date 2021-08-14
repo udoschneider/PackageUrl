@@ -13,6 +13,24 @@ Class {
 }
 
 { #category : #'instance creation' }
+PUrl class >> dockerImageNamed: imageName [ 
+
+^self dockerImageNamed: imageName version: 'latest'
+]
+
+{ #category : #'instance creation' }
+PUrl class >> dockerImageNamed: imageName version: version [
+
+	^ self
+		  type: 'docker'
+		  namespace: nil
+		  name: imageName
+		  version: version
+		  qualifiers: nil
+		  subpath: nil
+]
+
+{ #category : #'instance creation' }
 PUrl class >> fromString: aString [
 
 	"Implementation according to https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#user-content-how-to-parse-a-purl-string-in-its-components "
