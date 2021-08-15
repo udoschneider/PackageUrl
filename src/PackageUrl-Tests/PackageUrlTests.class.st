@@ -1,15 +1,15 @@
 Class {
-	#name : #PUrlTests,
+	#name : #PackageUrlTests,
 	#superclass : #TestCase,
 	#category : #'PackageUrl-Tests'
 }
 
 { #category : #tests }
-PUrlTests >> testDocker [
+PackageUrlTests >> testDocker [
 
 	| purl |
-	purl := PUrl dockerImageNamed: 'alpine'.
+	purl := PackageUrl dockerImageNamed: 'alpine'.
 	self assert: purl canonical equals: 'pkg:docker/alpine'.
-	purl := PUrl dockerImageNamed: 'alpine' version: '3.11.11'.
+	purl := PackageUrl dockerImageNamed: 'alpine' version: '3.11.11'.
 	self assert: purl canonical equals: 'pkg:docker/alpine@3.11.11'
 ]

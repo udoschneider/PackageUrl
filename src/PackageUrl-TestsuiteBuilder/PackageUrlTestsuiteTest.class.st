@@ -1,5 +1,5 @@
 Class {
-	#name : #PUrlTestsuiteTest,
+	#name : #PackageUrlTestsuiteTest,
 	#superclass : #Object,
 	#instVars : [
 		'description',
@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : #accessing }
-PUrlTestsuiteTest class >> neoJsonMapping: mapper [
+PackageUrlTestsuiteTest class >> neoJsonMapping: mapper [
 
 	mapper for: self do: [ :mapping | 
 		mapping mapInstVars:
@@ -29,7 +29,7 @@ PUrlTestsuiteTest class >> neoJsonMapping: mapper [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitAssertion: property equals: value to: aStream [
+PackageUrlTestsuiteTest >> emitAssertion: property equals: value to: aStream [
 
 	aStream
 		nextPutAll: 'self assert: purl ';
@@ -41,7 +41,7 @@ PUrlTestsuiteTest >> emitAssertion: property equals: value to: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitAssertion: property equalsDictionary: value to: aStream [
+PackageUrlTestsuiteTest >> emitAssertion: property equalsDictionary: value to: aStream [
 
 	aStream
 		nextPutAll: 'self assert: purl ';
@@ -54,7 +54,7 @@ PUrlTestsuiteTest >> emitAssertion: property equalsDictionary: value to: aStream
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitAssertions: aStream [
+PackageUrlTestsuiteTest >> emitAssertions: aStream [
 
 	isInvalid
 		ifTrue: [ self emitInvalidAssertion: aStream ]
@@ -62,7 +62,7 @@ PUrlTestsuiteTest >> emitAssertions: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitInvalidAssertion: aStream [
+PackageUrlTestsuiteTest >> emitInvalidAssertion: aStream [
 
 	aStream
 		nextPutAll: 'self should: [';
@@ -75,7 +75,7 @@ PUrlTestsuiteTest >> emitInvalidAssertion: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitMethodHeader: aStream [
+PackageUrlTestsuiteTest >> emitMethodHeader: aStream [
 
 	aStream
 		nextPutAll: '|purl|';
@@ -88,7 +88,7 @@ PUrlTestsuiteTest >> emitMethodHeader: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitMethodSignature: aStream [
+PackageUrlTestsuiteTest >> emitMethodSignature: aStream [
 
 	aStream
 		nextPutAll: self testMethodName;
@@ -96,7 +96,7 @@ PUrlTestsuiteTest >> emitMethodSignature: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitTestComment: aStream [
+PackageUrlTestsuiteTest >> emitTestComment: aStream [
 
 	description isNil ifTrue: [ ^ self ].
 	self printCleanedComment: description to: aStream.
@@ -104,7 +104,7 @@ PUrlTestsuiteTest >> emitTestComment: aStream [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> emitValidAssertions: aStream [
+PackageUrlTestsuiteTest >> emitValidAssertions: aStream [
 
 	self
 		emitMethodHeader: aStream;
@@ -120,7 +120,7 @@ PUrlTestsuiteTest >> emitValidAssertions: aStream [
 ]
 
 { #category : #'code generation' }
-PUrlTestsuiteTest >> generateCode: aClass [
+PackageUrlTestsuiteTest >> generateCode: aClass [
 
 	| methodName methodContent |
 	methodContent := String streamContents: [ :stream | 
@@ -136,7 +136,7 @@ PUrlTestsuiteTest >> generateCode: aClass [
 ]
 
 { #category : #private }
-PUrlTestsuiteTest >> printCleanedComment: aString to: aStream [
+PackageUrlTestsuiteTest >> printCleanedComment: aString to: aStream [
 
 	aStream nextPut: $".
 	aString do: [ :each | 
@@ -147,7 +147,7 @@ PUrlTestsuiteTest >> printCleanedComment: aString to: aStream [
 ]
 
 { #category : #accessing }
-PUrlTestsuiteTest >> testMethodName [
+PackageUrlTestsuiteTest >> testMethodName [
 
 	^ testMethodName ifNil: [ 
 		  | cleanedDescription |

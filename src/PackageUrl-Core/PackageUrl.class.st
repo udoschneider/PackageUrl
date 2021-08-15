@@ -1,5 +1,5 @@
 Class {
-	#name : #PUrl,
+	#name : #PackageUrl,
 	#superclass : #Object,
 	#instVars : [
 		'type',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PUrl class >> dockerImageNamed: imageName [
+PackageUrl class >> dockerImageNamed: imageName [
 
 		^ self
 		  type: 'docker'
@@ -25,7 +25,7 @@ PUrl class >> dockerImageNamed: imageName [
 ]
 
 { #category : #'instance creation' }
-PUrl class >> dockerImageNamed: imageName version: version [
+PackageUrl class >> dockerImageNamed: imageName version: version [
 
 	^ self
 		  type: 'docker'
@@ -37,7 +37,7 @@ PUrl class >> dockerImageNamed: imageName version: version [
 ]
 
 { #category : #'instance creation' }
-PUrl class >> fromString: aString [
+PackageUrl class >> fromString: aString [
 
 	"Implementation according to https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#user-content-how-to-parse-a-purl-string-in-its-components "
 
@@ -92,7 +92,7 @@ PUrl class >> fromString: aString [
 		splitRight: remainder
 		leftDo: [ :value | remainder := value ]
 		rightDo: [ :value | 
-			version := value ifEmpty: [ nil ] ifNotEmpty: [ value purlDecoded ] ].
+			version := value ifEmpty: [ nil ] ifNotEmpty: [ value packageUrlDecoded ] ].
 
 	"Split the remainder once from right on '/'
     The left side is the remainder
@@ -101,7 +101,7 @@ PUrl class >> fromString: aString [
     Apply type-specific normalization to the name if needed"
 	remainder := $/ split: remainder.
 	aName := remainder removeLast ifEmpty: [ 
-		         PUrlError signal: 'a name is required' ].
+		         PackageUrlError signal: 'a name is required' ].
 
 
 	"Split the remainder on '/'
@@ -113,7 +113,7 @@ PUrl class >> fromString: aString [
     This is the namespace"
 
 	namespace := ($/ join:
-		              ((remainder reject: #isEmpty) collect: #purlDecoded)) 
+		              ((remainder reject: #isEmpty) collect: #packageUrlDecoded)) 
 		             ifEmpty: [ nil ].
 
 	^ self
@@ -126,7 +126,7 @@ PUrl class >> fromString: aString [
 ]
 
 { #category : #accessing }
-PUrl class >> neoJsonMapping: mapper [
+PackageUrl class >> neoJsonMapping: mapper [
 
 	mapper for: self customDo: [ :mapping | 
 		mapping
@@ -135,7 +135,7 @@ PUrl class >> neoJsonMapping: mapper [
 ]
 
 { #category : #private }
-PUrl class >> parseQualifiers: aString [
+PackageUrl class >> parseQualifiers: aString [
 
 	| qualifiers pairs |
 	qualifiers := Dictionary new.
@@ -150,14 +150,14 @@ PUrl class >> parseQualifiers: aString [
 		key
 			detect: [ :each | each isAllowedInPackageUrlKey not ]
 			ifFound: [ :char | 
-				PUrlError signal:
+				PackageUrlError signal:
 					'The key must be composed only of ASCII letters and numbers, ''.'', ''-'' and ''_'' (period, dash and underscore)' ].
 		key first isDigit ifTrue: [ 
-			PUrlError signal: 'A key cannot start with a number' ].
-		key purlDecoded = key ifFalse: [ 
-			PUrlError signal: 'A key must NOT be percent-encoded' ].
+			PackageUrlError signal: 'A key cannot start with a number' ].
+		key packageUrlDecoded = key ifFalse: [ 
+			PackageUrlError signal: 'A key must NOT be percent-encoded' ].
 		"The value is the percent-decoded right side"
-		value := split second purlDecoded.
+		value := split second packageUrlDecoded.
 		"UTF-8-decode the value if needed in your programming language"
 		"Discard any key/value pairs where the value is empty"
 		(key isEmpty or: [ value isEmpty ]) ifFalse: [ 
@@ -170,7 +170,7 @@ PUrl class >> parseQualifiers: aString [
 ]
 
 { #category : #private }
-PUrl class >> parseSubpath: aString [
+PackageUrl class >> parseSubpath: aString [
 
 	| subpath |
 	"Strip the right side from leading and trailing '/'"
@@ -182,7 +182,7 @@ PUrl class >> parseSubpath: aString [
 	subpath := subpath reject: [ :each | 
 		           each isEmpty or: [ each = '.' or: [ each = '..' ] ] ].
 	"Percent-decode each segment"
-	subpath := subpath do: #purlDecoded.
+	subpath := subpath do: #packageUrlDecoded.
 	"UTF-8-decode each segment if needed in your programming language"
 	"Join segments back with a '/'
 	This is the subpath"
@@ -190,7 +190,7 @@ PUrl class >> parseSubpath: aString [
 ]
 
 { #category : #'instance creation' }
-PUrl class >> type: aType namespace: aNamespace name: aName version: aVersion qualifiers: aDictionary subpath: aSubpath [
+PackageUrl class >> type: aType namespace: aNamespace name: aName version: aVersion qualifiers: aDictionary subpath: aSubpath [
 
 	^ self new
 		  setType: aType
@@ -204,23 +204,23 @@ PUrl class >> type: aType namespace: aNamespace name: aName version: aVersion qu
 ]
 
 { #category : #accessing }
-PUrl >> canonical [
+PackageUrl >> canonical [
 
 	^ String streamContents: [ :stream | self printCanonicalOn: stream ]
 ]
 
 { #category : #accessing }
-PUrl >> name [
+PackageUrl >> name [
 	^ name
 ]
 
 { #category : #accessing }
-PUrl >> namespace [
+PackageUrl >> namespace [
 	^ namespace
 ]
 
 { #category : #printing }
-PUrl >> printCanonicalOn: aStream [
+PackageUrl >> printCanonicalOn: aStream [
 
 	"Start a purl string with the 'pkg:' scheme as a lowercase ASCII string
 	Append the type string to the purl as a lowercase ASCII string
@@ -262,7 +262,7 @@ PUrl >> printCanonicalOn: aStream [
         Append the percent-encoded version to the purl"
 		aStream
 			nextPut: $@;
-			nextPutAll: version purlEncoded ].
+			nextPutAll: version packageUrlEncoded ].
 
 	qualifiers isEmptyOrNil ifFalse: [ "If the qualifiers are not empty and not composed only of key/value pairs where the value is empty:
         Append '?' to the purl
@@ -281,7 +281,7 @@ PUrl >> printCanonicalOn: aStream [
 				"key = 'checksums'"
 				value := (false
 					          ifFalse: [ qualifiers at: key ]
-					          ifTrue: [ $, join: (qualifiers at: key) ]) purlEncoded.
+					          ifTrue: [ $, join: (qualifiers at: key) ]) packageUrlEncoded.
 				aStream
 					nextPutAll: key;
 					nextPut: $=;
@@ -303,18 +303,18 @@ PUrl >> printCanonicalOn: aStream [
 ]
 
 { #category : #printing }
-PUrl >> printOn: aStream [
+PackageUrl >> printOn: aStream [
 
 	self printCanonicalOn: aStream
 ]
 
 { #category : #accessing }
-PUrl >> qualifiers [
+PackageUrl >> qualifiers [
 	^ qualifiers
 ]
 
 { #category : #initialization }
-PUrl >> sanitize [
+PackageUrl >> sanitize [
 
 	type = 'bitbucket' ifTrue: [ self sanitizeBitbucket ].
 	type = 'deb' ifTrue: [ self sanitizeDebian ].
@@ -328,60 +328,60 @@ PUrl >> sanitize [
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeBitbucket [
+PackageUrl >> sanitizeBitbucket [
 
 	namespace := namespace asLowercase.
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeDebian [
+PackageUrl >> sanitizeDebian [
 
 	namespace := namespace asLowercase.
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeGithub [
+PackageUrl >> sanitizeGithub [
 
 	namespace := namespace asLowercase.
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeGolang [
+PackageUrl >> sanitizeGolang [
 
 	namespace := namespace asLowercase.
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeHex [
+PackageUrl >> sanitizeHex [
 
 	namespace := namespace asLowercase.
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeNpm [
+PackageUrl >> sanitizeNpm [
 
 	name := name asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> sanitizePypi [
+PackageUrl >> sanitizePypi [
 
 	name := name asLowercase replaceAll: $_ with: $-
 ]
 
 { #category : #initialization }
-PUrl >> sanitizeRpm [
+PackageUrl >> sanitizeRpm [
 
 	namespace := namespace asLowercase
 ]
 
 { #category : #initialization }
-PUrl >> setType: aType namespace: aNamespace name: aName version: aVersion qualifiers: aDictionary subpath: aSubpath [
+PackageUrl >> setType: aType namespace: aNamespace name: aName version: aVersion qualifiers: aDictionary subpath: aSubpath [
 
 	type := aType.
 	namespace := aNamespace.
@@ -392,16 +392,16 @@ PUrl >> setType: aType namespace: aNamespace name: aName version: aVersion quali
 ]
 
 { #category : #accessing }
-PUrl >> subpath [
+PackageUrl >> subpath [
 	^ subpath
 ]
 
 { #category : #accessing }
-PUrl >> type [
+PackageUrl >> type [
 	^ type
 ]
 
 { #category : #accessing }
-PUrl >> version [
+PackageUrl >> version [
 	^ version
 ]

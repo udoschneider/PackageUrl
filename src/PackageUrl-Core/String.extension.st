@@ -1,18 +1,18 @@
 Extension { #name : #String }
 
 { #category : #'*PackageUrl-Core' }
-String >> purlDecoded [
+String >> packageUrlDecoded [
 
 
-	^ PurlPercentEncoder new decode: self
+	^ PackageUrlPercentEncoder new decode: self
 ]
 
 { #category : #'*PackageUrl-Core' }
-String >> purlEncoded [
+String >> packageUrlEncoded [
 
 	
 
-	^ PurlPercentEncoder new encode: self
+	^ PackageUrlPercentEncoder new encode: self
 ]
 
 { #category : #'*PackageUrl-Core' }

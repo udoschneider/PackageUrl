@@ -1,11 +1,11 @@
 Class {
-	#name : #PUrlExtensionTests,
+	#name : #PackageUrlExtensionTests,
 	#superclass : #TestCase,
 	#category : #'PackageUrl-Tests'
 }
 
 { #category : #private }
-PUrlExtensionTests >> asserSplitLeft: aSequenceableCollection separator: separator left: left right: right [
+PackageUrlExtensionTests >> asserSplitLeft: aSequenceableCollection separator: separator left: left right: right [
 
 	| split |
 	split := separator splitLeft: aSequenceableCollection.
@@ -20,7 +20,7 @@ PUrlExtensionTests >> asserSplitLeft: aSequenceableCollection separator: separat
 ]
 
 { #category : #private }
-PUrlExtensionTests >> asserSplitRightt: aSequenceableCollection separator: separator left: left right: right [
+PackageUrlExtensionTests >> asserSplitRightt: aSequenceableCollection separator: separator left: left right: right [
 
 	| split |
 	split := separator splitRight: aSequenceableCollection.
@@ -34,7 +34,7 @@ PUrlExtensionTests >> asserSplitRightt: aSequenceableCollection separator: separ
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testLeftEmpty [
+PackageUrlExtensionTests >> testLeftEmpty [
 
 	self
 		asserSplitLeft: ''
@@ -44,7 +44,7 @@ PUrlExtensionTests >> testLeftEmpty [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testLeftMultipleSeparators [
+PackageUrlExtensionTests >> testLeftMultipleSeparators [
 
 	self
 		asserSplitLeft: 'left/right1/right/right3'
@@ -54,7 +54,7 @@ PUrlExtensionTests >> testLeftMultipleSeparators [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testLeftNoSeparator [
+PackageUrlExtensionTests >> testLeftNoSeparator [
 
 	self
 		asserSplitLeft: 'value'
@@ -64,7 +64,7 @@ PUrlExtensionTests >> testLeftNoSeparator [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testLeftOneSeparator [
+PackageUrlExtensionTests >> testLeftOneSeparator [
 
 	self
 		asserSplitLeft: 'left/right'
@@ -74,7 +74,7 @@ PUrlExtensionTests >> testLeftOneSeparator [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testRightEmpty [
+PackageUrlExtensionTests >> testRightEmpty [
 
 
 self
@@ -85,7 +85,7 @@ self
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testRightMultipleSeparators [
+PackageUrlExtensionTests >> testRightMultipleSeparators [
 
 	self
 		asserSplitRightt: 'left1/left2/left3/right'
@@ -95,7 +95,7 @@ PUrlExtensionTests >> testRightMultipleSeparators [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testRightNoSeparator [
+PackageUrlExtensionTests >> testRightNoSeparator [
 
 	self
 		asserSplitRightt: 'value'
@@ -105,7 +105,7 @@ PUrlExtensionTests >> testRightNoSeparator [
 ]
 
 { #category : #tests }
-PUrlExtensionTests >> testRightOneSeparator [
+PackageUrlExtensionTests >> testRightOneSeparator [
 
 	self
 		asserSplitRightt: 'left/right'

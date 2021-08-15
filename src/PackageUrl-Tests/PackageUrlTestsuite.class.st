@@ -1,49 +1,49 @@
 Class {
-	#name : #PUrlTestsuiteTests,
+	#name : #PackageUrlTestsuite,
 	#superclass : #TestCase,
 	#category : #'PackageUrl-Tests'
 }
 
 { #category : #tests }
-PUrlTestsuiteTests >> testANameIsRequired [
+PackageUrlTestsuite >> testANameIsRequired [
 
 	"a name is required"
 
 	self
-		should: [ PUrl fromString: 'pkg:maven/@1.3.4' ]
-		raise: PUrlError
+		should: [ PackageUrl fromString: 'pkg:maven/@1.3.4' ]
+		raise: PackageUrlError
 		description: 'should raise: a name is required'
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testASchemeIsAlwaysRequired [
+PackageUrlTestsuite >> testASchemeIsAlwaysRequired [
 
 	"a scheme is always required"
 
 	self
-		should: [ PUrl fromString: 'EnterpriseLibrary.Common@6.0.1304' ]
-		raise: PUrlError
+		should: [ PackageUrl fromString: 'EnterpriseLibrary.Common@6.0.1304' ]
+		raise: PackageUrlError
 		description: 'should raise: a scheme is always required'
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testATypeIsAlwaysRequired [
+PackageUrlTestsuite >> testATypeIsAlwaysRequired [
 
 	"a type is always required"
 
 	self
-		should: [ PUrl fromString: 'pkg:EnterpriseLibrary.Common@6.0.1304' ]
-		raise: PUrlError
+		should: [ PackageUrl fromString: 'pkg:EnterpriseLibrary.Common@6.0.1304' ]
+		raise: PackageUrlError
 		description: 'should raise: a type is always required'
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testBasicValidMavenPurlWithoutVersion [
+PackageUrlTestsuite >> testBasicValidMavenPurlWithoutVersion [
 
 	"basic valid maven purl without version"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:maven/org.apache.commons/io'.
+	purl := PackageUrl fromString: 'pkg:maven/org.apache.commons/io'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.commons'.
 	self assert: purl name equals: 'io'.
@@ -54,12 +54,12 @@ PUrlTestsuiteTests >> testBasicValidMavenPurlWithoutVersion [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testBitbucketNamespaceAndNameShouldBeLowercased [
+PackageUrlTestsuite >> testBitbucketNamespaceAndNameShouldBeLowercased [
 
 	"bitbucket namespace and name should be lowercased"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:bitbucket/birKenfeld/pyGments-main@244fd47e07d1014f0aed9c'.
 	self assert: purl type equals: 'bitbucket'.
 	self assert: purl namespace equals: 'birkenfeld'.
@@ -74,24 +74,24 @@ PUrlTestsuiteTests >> testBitbucketNamespaceAndNameShouldBeLowercased [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testChecksForInvalidQualifierKeys [
+PackageUrlTestsuite >> testChecksForInvalidQualifierKeys [
 
 	"checks for invalid qualifier keys"
 
 	self
 		should: [ 
-		PUrl fromString: 'pkg:npm/myartifact@1.0.0?in%20production=true' ]
-		raise: PUrlError
+		PackageUrl fromString: 'pkg:npm/myartifact@1.0.0?in%20production=true' ]
+		raise: PackageUrlError
 		description: 'should raise: checks for invalid qualifier keys'
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testDebianCanUseQualifiers [
+PackageUrlTestsuite >> testDebianCanUseQualifiers [
 
 	"debian can use qualifiers"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:deb/debian/curl@7.50.3-1?arch=i386&distro=jessie'.
 	self assert: purl type equals: 'deb'.
 	self assert: purl namespace equals: 'debian'.
@@ -108,12 +108,12 @@ PUrlTestsuiteTests >> testDebianCanUseQualifiers [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testDockerUsesQualifiersAndHashImageIdAsVersions [
+PackageUrlTestsuite >> testDockerUsesQualifiersAndHashImageIdAsVersions [
 
 	"docker uses qualifiers and hash image id as versions"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:docker/customer/dockerimage@sha256:244fd47e07d1004f0aed9c?repository_url=gcr.io'.
 	self assert: purl type equals: 'docker'.
 	self assert: purl namespace equals: 'customer'.
@@ -130,12 +130,12 @@ PUrlTestsuiteTests >> testDockerUsesQualifiersAndHashImageIdAsVersions [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testDoubleSlashAfterSchemeIsNotSignificant [
+PackageUrlTestsuite >> testDoubleSlashAfterSchemeIsNotSignificant [
 
 	"double slash // after scheme is not significant"
 
 	| purl |
-	purl := PUrl fromString: 'pkg://maven/org.apache.commons/io'.
+	purl := PackageUrl fromString: 'pkg://maven/org.apache.commons/io'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.commons'.
 	self assert: purl name equals: 'io'.
@@ -146,12 +146,12 @@ PUrlTestsuiteTests >> testDoubleSlashAfterSchemeIsNotSignificant [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testGithubNamespaceAndNameShouldBeLowercased [
+PackageUrlTestsuite >> testGithubNamespaceAndNameShouldBeLowercased [
 
 	"github namespace and name should be lowercased"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:github/Package-url/purl-Spec@244fd47e07d1004f0aed9c'.
 	self assert: purl type equals: 'github'.
 	self assert: purl namespace equals: 'package-url'.
@@ -165,12 +165,12 @@ PUrlTestsuiteTests >> testGithubNamespaceAndNameShouldBeLowercased [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testJavaGemCanUseAQualifier [
+PackageUrlTestsuite >> testJavaGemCanUseAQualifier [
 
 	"Java gem can use a qualifier"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:gem/jruby-launcher@1.1.2?Platform=java'.
+	purl := PackageUrl fromString: 'pkg:gem/jruby-launcher@1.1.2?Platform=java'.
 	self assert: purl type equals: 'gem'.
 	self assert: purl namespace equals: nil.
 	self assert: purl name equals: 'jruby-launcher'.
@@ -185,12 +185,12 @@ PUrlTestsuiteTests >> testJavaGemCanUseAQualifier [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testMavenCanComeWithATypeQualifier [
+PackageUrlTestsuite >> testMavenCanComeWithATypeQualifier [
 
 	"maven can come with a type qualifier"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:Maven/net.sf.jacob-project/jacob@1.14.3?classifier=x86&type=dll'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'net.sf.jacob-project'.
@@ -208,12 +208,12 @@ PUrlTestsuiteTests >> testMavenCanComeWithATypeQualifier [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testMavenOftenUsesQualifiers [
+PackageUrlTestsuite >> testMavenOftenUsesQualifiers [
 
 	"maven often uses qualifiers"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:Maven/org.apache.xmlgraphics/batik-anim@1.9.1?classifier=sources&repositorY_url=repo.spring.io/release'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.xmlgraphics'.
@@ -231,12 +231,12 @@ PUrlTestsuiteTests >> testMavenOftenUsesQualifiers [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testMavenPomReference [
+PackageUrlTestsuite >> testMavenPomReference [
 
 	"maven pom reference"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:Maven/org.apache.xmlgraphics/batik-anim@1.9.1?extension=pom&repositorY_url=repo.spring.io/release'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.xmlgraphics'.
@@ -254,12 +254,12 @@ PUrlTestsuiteTests >> testMavenPomReference [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testNpmCanBeScoped [
+PackageUrlTestsuite >> testNpmCanBeScoped [
 
 	"npm can be scoped"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:npm/%40angular/animation@12.3.1'.
+	purl := PackageUrl fromString: 'pkg:npm/%40angular/animation@12.3.1'.
 	self assert: purl type equals: 'npm'.
 	self assert: purl namespace equals: '@angular'.
 	self assert: purl name equals: 'animation'.
@@ -272,12 +272,12 @@ PUrlTestsuiteTests >> testNpmCanBeScoped [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testNugetNamesAreCaseSensitive [
+PackageUrlTestsuite >> testNugetNamesAreCaseSensitive [
 
 	"nuget names are case sensitive"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:Nuget/EnterpriseLibrary.Common@6.0.1304'.
 	self assert: purl type equals: 'nuget'.
 	self assert: purl namespace equals: nil.
@@ -291,12 +291,12 @@ PUrlTestsuiteTests >> testNugetNamesAreCaseSensitive [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testPypiNamesHaveSpecialRulesAndNotCaseSensitive [
+PackageUrlTestsuite >> testPypiNamesHaveSpecialRulesAndNotCaseSensitive [
 
 	"pypi names have special rules and not case sensitive"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:PYPI/Django_package@1.11.1.dev1'.
+	purl := PackageUrl fromString: 'pkg:PYPI/Django_package@1.11.1.dev1'.
 	self assert: purl type equals: 'pypi'.
 	self assert: purl namespace equals: nil.
 	self assert: purl name equals: 'django-package'.
@@ -309,12 +309,12 @@ PUrlTestsuiteTests >> testPypiNamesHaveSpecialRulesAndNotCaseSensitive [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testRpmOftenUseQualifiers [
+PackageUrlTestsuite >> testRpmOftenUseQualifiers [
 
 	"rpm often use qualifiers"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:Rpm/fedora/curl@7.50.3-1.fc25?Arch=i386&Distro=fedora-25'.
 	self assert: purl type equals: 'rpm'.
 	self assert: purl namespace equals: 'fedora'.
@@ -332,12 +332,12 @@ PUrlTestsuiteTests >> testRpmOftenUseQualifiers [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testSlashAfterSchemeIsNotSignificant [
+PackageUrlTestsuite >> testSlashAfterSchemeIsNotSignificant [
 
 	"slash / after scheme is not significant"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:/maven/org.apache.commons/io'.
+	purl := PackageUrl fromString: 'pkg:/maven/org.apache.commons/io'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.commons'.
 	self assert: purl name equals: 'io'.
@@ -348,12 +348,12 @@ PUrlTestsuiteTests >> testSlashAfterSchemeIsNotSignificant [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testSlashAfterTypeIsNotSignificant [
+PackageUrlTestsuite >> testSlashAfterTypeIsNotSignificant [
 
 	"slash /// after type  is not significant"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:///maven/org.apache.commons/io'.
+	purl := PackageUrl fromString: 'pkg:///maven/org.apache.commons/io'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.commons'.
 	self assert: purl name equals: 'io'.
@@ -364,12 +364,12 @@ PUrlTestsuiteTests >> testSlashAfterTypeIsNotSignificant [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testValidGoPurlWithVersionAndSubpath [
+PackageUrlTestsuite >> testValidGoPurlWithVersionAndSubpath [
 
 	"valid go purl with version and subpath"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:GOLANG/google.golang.org/genproto@abcdedf#/googleapis/api/annotations/'.
 	self assert: purl type equals: 'golang'.
 	self assert: purl namespace equals: 'google.golang.org'.
@@ -384,12 +384,12 @@ PUrlTestsuiteTests >> testValidGoPurlWithVersionAndSubpath [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testValidGoPurlWithoutVersionAndWithSubpath [
+PackageUrlTestsuite >> testValidGoPurlWithoutVersionAndWithSubpath [
 
 	"valid go purl without version and with subpath"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:GOLANG/google.golang.org/genproto#/googleapis/api/annotations/'.
 	self assert: purl type equals: 'golang'.
 	self assert: purl namespace equals: 'google.golang.org'.
@@ -404,12 +404,12 @@ PUrlTestsuiteTests >> testValidGoPurlWithoutVersionAndWithSubpath [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testValidMavenPurl [
+PackageUrlTestsuite >> testValidMavenPurl [
 
 	"valid maven purl"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:maven/org.apache.commons/io@1.3.4'.
+	purl := PackageUrl fromString: 'pkg:maven/org.apache.commons/io@1.3.4'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'org.apache.commons'.
 	self assert: purl name equals: 'io'.
@@ -422,12 +422,12 @@ PUrlTestsuiteTests >> testValidMavenPurl [
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testValidMavenPurlContainingASpaceInTheVersionAndQualifier [
+PackageUrlTestsuite >> testValidMavenPurlContainingASpaceInTheVersionAndQualifier [
 
 	"valid maven purl containing a space in the version and qualifier"
 
 	| purl |
-	purl := PUrl fromString:
+	purl := PackageUrl fromString:
 		        'pkg:maven/mygroup/myartifact@1.0.0%20Final?mykey=my%20value'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'mygroup'.
@@ -444,12 +444,12 @@ PUrlTestsuiteTests >> testValidMavenPurlContainingASpaceInTheVersionAndQualifier
 ]
 
 { #category : #tests }
-PUrlTestsuiteTests >> testValidMavenPurlWithCaseSensitiveNamespaceAndName [
+PackageUrlTestsuite >> testValidMavenPurlWithCaseSensitiveNamespaceAndName [
 
 	"valid maven purl with case sensitive namespace and name"
 
 	| purl |
-	purl := PUrl fromString: 'pkg:maven/HTTPClient/HTTPClient@0.3-3'.
+	purl := PackageUrl fromString: 'pkg:maven/HTTPClient/HTTPClient@0.3-3'.
 	self assert: purl type equals: 'maven'.
 	self assert: purl namespace equals: 'HTTPClient'.
 	self assert: purl name equals: 'HTTPClient'.

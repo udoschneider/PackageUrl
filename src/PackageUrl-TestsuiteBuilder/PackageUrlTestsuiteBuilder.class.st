@@ -1,5 +1,5 @@
 Class {
-	#name : #PUrlTestsuiteBuilder,
+	#name : #PackageUrlTestsuiteBuilder,
 	#superclass : #Object,
 	#instVars : [
 		'tests',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #constants }
-PUrlTestsuiteBuilder class >> downloadTestSuiteDataJson [
+PackageUrlTestsuiteBuilder class >> downloadTestSuiteDataJson [
 
 	^ [ (ZnEasy get: self url) contents ] asJob
 		  title: 'Dowbload Package URL Test Suite ...';
@@ -19,7 +19,7 @@ PUrlTestsuiteBuilder class >> downloadTestSuiteDataJson [
 ]
 
 { #category : #actions }
-PUrlTestsuiteBuilder class >> generateTestCases [
+PackageUrlTestsuiteBuilder class >> generateTestCases [
 
 	^ self new
 		  generateTestCases;
@@ -27,13 +27,13 @@ PUrlTestsuiteBuilder class >> generateTestCases [
 ]
 
 { #category : #actions }
-PUrlTestsuiteBuilder class >> removeTestCases [
+PackageUrlTestsuiteBuilder class >> removeTestCases [
 
-	PUrlTestsuiteTests removeFromSystem
+	PackageUrlTestsuite removeFromSystem
 ]
 
 { #category : #constants }
-PUrlTestsuiteBuilder class >> staticTestSuiteDataJson [
+PackageUrlTestsuiteBuilder class >> staticTestSuiteDataJson [
 
 	^ '[
   {
@@ -341,23 +341,23 @@ PUrlTestsuiteBuilder class >> staticTestSuiteDataJson [
 ]
 
 { #category : #constants }
-PUrlTestsuiteBuilder class >> url [
+PackageUrlTestsuiteBuilder class >> url [
 
 	^ 'https://raw.githubusercontent.com/package-url/purl-spec/master/test-suite-data.json'
 ]
 
 { #category : #private }
-PUrlTestsuiteBuilder >> createClass: packageName [
+PackageUrlTestsuiteBuilder >> createClass: packageName [
 
 	^ TestCase
-		  subclass: #PUrlTestsuiteTests
+		  subclass: #PackageUrlTestsuite
 		  instanceVariableNames: ''
 		  classVariableNames: ''
 		  package: self packageName
 ]
 
 { #category : #actions }
-PUrlTestsuiteBuilder >> generateTestCases [
+PackageUrlTestsuiteBuilder >> generateTestCases [
 
 	| class |
 	[ :job | 
@@ -371,13 +371,13 @@ PUrlTestsuiteBuilder >> generateTestCases [
 ]
 
 { #category : #accessing }
-PUrlTestsuiteBuilder >> packageName [
+PackageUrlTestsuiteBuilder >> packageName [
 
-	^ PUrlTests category asString
+	^ PackageUrlTests category asString
 ]
 
 { #category : #accessing }
-PUrlTestsuiteBuilder >> tests [
+PackageUrlTestsuiteBuilder >> tests [
 
 	^ tests ifNil: [ 
 		  [ 
@@ -388,15 +388,15 @@ PUrlTestsuiteBuilder >> tests [
 		  tests := (NeoJSONReader on: json readStream)
 			           for: #ArrayOfTests
 			           customDo: [ :mapping | 
-				           mapping listOfElementSchema: PUrlTestsuiteTest ];
+				           mapping listOfElementSchema: PackageUrlTestsuiteTest ];
 			           nextAs: #ArrayOfTests ] asJob
 			  title: 'Parsing Package URL Test Suite ...';
 			  run ]
 ]
 
 { #category : #actions }
-PUrlTestsuiteBuilder >> validateGeneratedTestCases [
+PackageUrlTestsuiteBuilder >> validateGeneratedTestCases [
 
 	self assert: [ 
-		tests size = PUrlTestsuiteTests testSelectors size ]
+		tests size = PackageUrlTestsuite testSelectors size ]
 ]
