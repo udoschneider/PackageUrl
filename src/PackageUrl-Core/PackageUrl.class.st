@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PackageUrl class >> dockerImageNamed: imageName [
+PackageUrl class >> dockerName: imageName [
 
 		^ self
 		  type: 'docker'
@@ -25,11 +25,23 @@ PackageUrl class >> dockerImageNamed: imageName [
 ]
 
 { #category : #'instance creation' }
-PackageUrl class >> dockerImageNamed: imageName version: version [
+PackageUrl class >> dockerName: imageName version: version [
 
 	^ self
 		  type: 'docker'
 		  namespace: nil
+		  name: imageName
+		  version: version
+		  qualifiers: nil
+		  subpath: nil
+]
+
+{ #category : #'instance creation' }
+PackageUrl class >> dockerRepository: repository name: imageName version: version [
+
+	^ self
+		  type: 'docker'
+		  namespace: repository
 		  name: imageName
 		  version: version
 		  qualifiers: nil
@@ -145,6 +157,8 @@ PackageUrl class >> parseQualifiers: aString [
 		| split key value |
 		"For each pair, split the key=value once from left on '=':"
 		split := $= split: pair.
+		"value cannot be an empty string: a key=value pair with an empty value is the same as no key/value at all for this key"
+		split size = 2 ifTrue: [
 		"The key is the lowercase left side"
 		key := split first asLowercase.
 		key
@@ -164,7 +178,7 @@ PackageUrl class >> parseQualifiers: aString [
 			qualifiers at: key put: (false
 					 ifTrue: [ "key = 'checksums'" "If the key is checksums, split the value on ',' to create a list of checksums" 
 						 $, split: value ]
-					 ifFalse: [ value ]) ] ].
+					 ifFalse: [ value ]) ] ]].
 	"This list of key/value is the qualifiers object"
 	^ qualifiers
 ]
@@ -189,6 +203,11 @@ PackageUrl class >> parseSubpath: aString [
 	^ $/ join: subpath
 ]
 
+{ #category : #accessing }
+PackageUrl class >> systemIconName [ 
+^#package
+]
+
 { #category : #'instance creation' }
 PackageUrl class >> type: aType namespace: aNamespace name: aName version: aVersion qualifiers: aDictionary subpath: aSubpath [
 
@@ -203,10 +222,33 @@ PackageUrl class >> type: aType namespace: aNamespace name: aName version: aVers
 		  yourself
 ]
 
+{ #category : #comparing }
+PackageUrl >> = aPackageUrl [
+^self class = aPackageUrl class ifTrue: [ self canonical  = aPackageUrl canonical  ]
+]
+
 { #category : #accessing }
 PackageUrl >> canonical [
 
 	^ String streamContents: [ :stream | self printCanonicalOn: stream ]
+]
+
+{ #category : #converting }
+PackageUrl >> dockerIdentifier [
+
+	^ String streamContents: [ :stream | 
+		  namespace ifNotNil: [ :value | stream nextPutAll: value ; nextPut: $/].
+		  stream nextPutAll: name.
+		  version ifNotNil: [ :value | 
+			  stream
+				  nextPut: $:;
+				  nextPutAll: value ] ]
+]
+
+{ #category : #comparing }
+PackageUrl >> hash [
+
+	^ self canonical hash
 ]
 
 { #category : #accessing }
