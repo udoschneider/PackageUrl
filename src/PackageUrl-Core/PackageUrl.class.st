@@ -251,6 +251,11 @@ PackageUrl >> hash [
 	^ self canonical hash
 ]
 
+{ #category : #testing }
+PackageUrl >> isNpm [ 
+^self type = 'npm'
+]
+
 { #category : #accessing }
 PackageUrl >> name [
 	^ name
